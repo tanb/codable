@@ -14,8 +14,15 @@ export class Codable {
       }
     };
     const instance = new this();
+    const reverseCodingKyes: { [key: string]: string } = {};
+    if (instance.codingKeys) {
+      Object.keys(instance.codingKeys).forEach(key => {
+        const value: string = instance.codingKeys![key];
+        reverseCodingKyes[value] = key;
+      });
+    }
     Object.keys(data).forEach(key => {
-      const propKey = instance.codingKeys ? instance.codingKeys[key] : key;
+      const propKey = instance.codingKeys ? reverseCodingKyes[key] : key;
       const cls = Reflect.getMetadata(METADATA_KEY, this, propKey) as T;
       let value = data[key];
       if (cls) {
