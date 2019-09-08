@@ -1,11 +1,12 @@
 {
   "name": "codable",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Codable base class for TypeScript.",
   "repository": {
     "type": "git",
     "url": "git@github.com:tanb/codable.git"
   },
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
