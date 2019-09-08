@@ -2,15 +2,16 @@ import 'reflect-metadata';
 
 const METADATA_KEY = Symbol('coding: type');
 
+
 export class Codable {
   codingKeys?: { [ key: string]: string };
-  static decode<T extends Codable>(data: { [ key: string]: any }): T {
+  static decode<T extends typeof Codable>(this: T, data: { [ key: string]: any }): InstanceType<T> {
     const keysValues: { [key: string]: any} = {};
-    const convert = <L extends Codable>(value: any): L | L[] => {
+    const convert = <L extends typeof Codable>(value: any, klass: L): InstanceType<L> | InstanceType<L>[] => {
       if (Array.isArray(value)) {
-        return value.map(v => Codable.decode<L>(v));
+        return value.map(v => klass.decode(v));
       } else {
-        return Codable.decode<L>(value);
+        return klass.decode(value);
       }
     };
     const instance = new this();
@@ -26,11 +27,11 @@ export class Codable {
       const klass = Reflect.getMetadata(METADATA_KEY, this, propKey);
       let value = data[key];
       if (klass) {
-        value = convert<typeof klass>(value);
+        value = convert(value, klass);
       }
       keysValues[propKey] = value;
     });
-    return Object.assign(instance, keysValues) as T;
+    return Object.assign(instance, keysValues) as InstanceType<T>;
   }
 
   encode(): object {
