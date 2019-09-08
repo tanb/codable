@@ -1,0 +1,34 @@
+{
+  "name": "codable",
+  "version": "0.1.0",
+  "description": "Codable base class for TypeScript.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tanb/codable.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "tags": [
+    "codable",
+    "decodable",
+    "encodable",
+    "serialization",
+    "deserialization",
+    "typescript"
+  ],
+  "author": {
+    "name": "Tomonori Tanabe",
+    "email": "tanb@me.com"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^3.6.2"
+  },
+  "license": "MIT"
+}
