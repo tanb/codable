@@ -63,7 +63,7 @@ export class Codable {
   }
 }
 
-export function CodableType<T extends Codable>(klass: T) {
+export function CodableType<T extends typeof Codable>(klass: T) {
   return (target: any, propertyKey: any) => {
     Reflect.defineMetadata(METADATA_KEY, klass, target, propertyKey);
   };
