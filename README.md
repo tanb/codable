@@ -67,5 +67,5 @@ const landmark = Landmark.decode(responseBody);
 Encode object to dictionary as JSON
 ```
 const data = landmark.encode();
-const requestBody = JSON.storingify(data);
+const requestBody = JSON.stringify(data);
 ```
