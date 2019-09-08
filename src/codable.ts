@@ -4,7 +4,7 @@ const METADATA_KEY = Symbol('coding: type');
 
 export class Codable {
   codingKeys?: { [ key: string]: string };
-  static decode<T extends Codable>(data: { [ key: string]: any }): any {
+  static decode<T extends Codable>(data: { [ key: string]: any }): T {
     const keysValues: { [key: string]: any} = {};
     const convert = <L extends Codable>(value: any): L | L[] => {
       if (Array.isArray(value)) {
