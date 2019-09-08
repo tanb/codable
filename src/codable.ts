@@ -4,13 +4,13 @@ const METADATA_KEY = Symbol('coding: type');
 
 export class Codable {
   codingKeys?: { [ key: string]: string };
-  static decode<T extends typeof Codable>(this: T, data: { [ key: string]: any }): InstanceType<T> {
+  static decode<T extends Codable>(data: { [ key: string]: any }): any {
     const keysValues: { [key: string]: any} = {};
-    const convert = (value: any, cls: T): InstanceType<T> | InstanceType<T>[] => {
+    const convert = <L extends Codable>(value: any): L | L[] => {
       if (Array.isArray(value)) {
-        return value.map(v => cls.decode(v));
+        return value.map(v => Codable.decode<L>(v));
       } else {
-        return cls.decode(value);
+        return Codable.decode<L>(value);
       }
     };
     const instance = new this();
@@ -23,14 +23,14 @@ export class Codable {
     }
     Object.keys(data).forEach(key => {
       const propKey = instance.codingKeys ? reverseCodingKyes[key] : key;
-      const cls = Reflect.getMetadata(METADATA_KEY, this, propKey) as T;
+      const klass = Reflect.getMetadata(METADATA_KEY, this, propKey);
       let value = data[key];
-      if (cls) {
-        value = convert(value, cls);
+      if (klass) {
+        value = convert<typeof klass>(value);
       }
       keysValues[propKey] = value;
     });
-    return Object.assign(instance, keysValues) as InstanceType<T>;
+    return Object.assign(instance, keysValues) as T;
   }
 
   encode(): object {
@@ -63,7 +63,7 @@ export class Codable {
   }
 }
 
-export function CodableType<T extends typeof Codable>(klass: T) {
+export function CodableType<T extends Codable>(klass: T) {
   return (target: any, propertyKey: any) => {
     Reflect.defineMetadata(METADATA_KEY, klass, target, propertyKey);
   };
