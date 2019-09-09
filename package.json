@@ -1,6 +1,6 @@
 {
   "name": "codable",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Codable base class for TypeScript.",
   "repository": {
     "type": "git",
