@@ -11,12 +11,12 @@ yarn add codable
 # Usage
 Import Codable and CodableType to create codable class;
 
-```
+```typescript
 import { Codable, CodableType } from 'codable';
 ```
 
 Decode JSON response to object
-```
+```typescript
 // Example
 const responseBody: JSON = JSON.parse(`
 {
@@ -65,7 +65,7 @@ const landmark = Landmark.decode(responseBody);
 ```
 
 Encode object to dictionary as JSON
-```
+```typescript
 const data = landmark.encode();
 const requestBody = JSON.stringify(data);
 ```
