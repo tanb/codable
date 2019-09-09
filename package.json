@@ -26,6 +26,9 @@
     "name": "Tomonori Tanabe",
     "email": "tanb@me.com"
   },
+  "bugs": {
+    "url": "https://github.com/tanb/codable/issues"
+  },
   "dependencies": {},
   "devDependencies": {
     "reflect-metadata": "^0.1.13",
