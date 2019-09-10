@@ -13,6 +13,9 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
     ],
     karmaTypescriptConfig: {
+      compilerOptions: {
+        sourceMap: true,
+      },
       tsconfig: "./tsconfig.json",
     },
     files: [ { pattern: 'src/**/*.ts' }, { pattern: 'test/**/*.spec.ts' } ],
