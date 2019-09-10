@@ -39,7 +39,7 @@ const responseBody: JSON = JSON.parse(`
     },
     {
       "latitude": 35.460179,
-      "longitude":138.832873
+      "longitude": 138.832873
     }
   ]
 }`);
