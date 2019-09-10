@@ -51,7 +51,7 @@ class Coordinate extends Codable {
 
 class Landmark extends Codable {
   name: string
-  foundingYear: number
+  foundingDate: string
 
   @CodableType(Coordinate)
   location: Coordinate
@@ -61,7 +61,7 @@ class Landmark extends Codable {
 
   codingKeys = {
     name: "title",
-    foundingYear: "founding_date",
+    foundingDate: "founding_date",
     location: "location",
     vantagePoints: "vantage_points"
   }
@@ -75,7 +75,7 @@ Codable class has an optional property **codingKeys** for property name mapping.
 ```
 codingKeys = {
   <Key name of Object>: <Key name of JSON>
-} 
+}
 ```
 
 ## Encode
@@ -106,4 +106,3 @@ This example requestBody will be:
   ]
 }
 ```
-
