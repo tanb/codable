@@ -1,7 +1,6 @@
 # codable
-<a href="https://www.npmjs.com/package/codable">
-  <img src="https://img.shields.io/npm/dw/codable.svg" />
-</a>
+<a href="https://www.npmjs.com/package/codable"><img src="https://img.shields.io/npm/v/codable.svg" /></a>
+<a href="https://www.npmjs.com/package/codable"><img src="https://img.shields.io/npm/dw/codable.svg" /></a>
 
 Codable base class for TypeScript
 
