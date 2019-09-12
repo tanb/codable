@@ -45,37 +45,39 @@ const responseBody: JSON = JSON.parse(`
 }`);
 
 class Coordinate extends Codable {
-  latitude: number
-  longitude: number
+  latitude: number;
+  longitude: number;
 }
 
+@CodingKeys({
+  name: "title",
+  foundingDate: "founding_date",
+  location: "location",
+  vantagePoints: "vantage_points"
+})
 class Landmark extends Codable {
-  name: string
-  foundingDate: string
+  name: string;
+  foundingDate: string;
 
   @CodableType(Coordinate)
-  location: Coordinate
+  location: Coordinate;
 
   @CodableType(Coordinate)
-  vantagePoints: Coordinate[]
-
-  codingKeys = {
-    name: "title",
-    foundingDate: "founding_date",
-    location: "location",
-    vantagePoints: "vantage_points"
-  }
+  vantagePoints: Coordinate[];
 }
 
 const landmark = Landmark.decode(responseBody);
 ```
 
-Codable class has an optional property **codingKeys** for property name mapping. And If you set names to **codingKeys**, only the names properties are going to be converted. If the **codingKeys** is undefined, then every property will be converted.
+Landmark class has the class decorator **@CodingKeys** for property key mapping. If you set keys, only those keys properties are going to be converted. If you don't set **@CodingKeys** decorator, then every property will be converted.
 
 ```
-codingKeys = {
-  <Key name of Object>: <Key name of JSON>
-}
+@CodingKeys({
+  <Key name of Object>: <Key name of JSON>,
+  ...
+})
+export class MyClass {
+...
 ```
 
 ## Encode
