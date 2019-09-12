@@ -14,9 +14,9 @@ yarn add codable
 # Usage
 
 ## Import
-Import **Codable** and **CodableType** to create codable class.
+Import **Codable**, **CodableType** and **CodingKeys** to create codable class.
 ```typescript
-import { Codable, CodableType } from 'codable';
+import { Codable, CodableType, CodingKeys } from 'codable';
 ```
 
 ## Decode
