@@ -1,4 +1,4 @@
-import { Codable, CodableType } from '../src/codable'
+import { Codable, CodableType, CodingKeys } from '../src/codable'
 
 describe('Codable test suite', () => {
 const jsonString = `{
@@ -24,6 +24,13 @@ const jsonString = `{
     latitude!: number
     longitude!: number
   }
+
+  @CodingKeys({
+      name: "title",
+      foundingDate: "founding_date",
+      location: "location",
+      vantagePoints: "vantage_points"
+  })
   class Landmark extends Codable {
     name!: string
     foundingDate!: string
@@ -33,13 +40,6 @@ const jsonString = `{
 
     @CodableType(Coordinate)
     vantagePoints!: Coordinate[]
-
-    codingKeys = {
-      name: "title",
-      foundingDate: "founding_date",
-      location: "location",
-      vantagePoints: "vantage_points"
-    }
   }
 
   beforeEach(() => {
@@ -55,7 +55,6 @@ const jsonString = `{
   it('Decode: codingKeys', () => {
     const landmark = Landmark.decode(responseBody);
     expect(JSON.stringify(Object.keys(landmark).sort())).toBe(JSON.stringify([
-      'codingKeys',
       'name',
       'foundingDate',
       'location',
