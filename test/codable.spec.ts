@@ -77,14 +77,14 @@ describe('Codable test suite', () => {
 })
 
 
-describe('Dynamic property test suite', () => {
+describe('Accessor method properties test suite', () => {
   const jsonString = `{
   "first_name": "John",
   "last_name": "Appleseed"
 }`;
   const responseBody: JSON = JSON.parse(jsonString);
 
-  it('Dynamic property will be encoded.', ()=> {
+  it('Accessor method properties will be encoded.', ()=> {
     class User extends Codable {
       first_name!: string;
       last_name!: string;
@@ -105,7 +105,7 @@ describe('Dynamic property test suite', () => {
            );
   });
 
-  it('CodingKeys can replace dynamic property keys.', ()=> {
+  it('CodingKeys can replace Accessor method property keys.', ()=> {
     @CodingKeys({
       first_name: 'first_name',
       last_name: 'last_name',
@@ -131,7 +131,7 @@ describe('Dynamic property test suite', () => {
            );
   });
 
-  it('Dynamic property is decodable', ()=> {
+  it('Accessor method properties are decodable', ()=> {
     const jsonString = `{
   "first_name": "John",
   "last_name": "Appleseed",
@@ -145,7 +145,7 @@ describe('Dynamic property test suite', () => {
       full_name: 'full_name'
     })
     class User extends Codable {
-      private _full_name!: string;
+      _full_name!: string;
 
       first_name!: string;
       last_name!: string;
@@ -159,5 +159,13 @@ describe('Dynamic property test suite', () => {
     }
     const user = User.decode(responseBody);
     expect(user.full_name).toBe('John Appleseed');
+    const data = user.encode();
+    expect(JSON.stringify(data, null, 2))
+      .toBe(`{
+  "first_name": "John",
+  "last_name": "Appleseed",
+  "full_name": "John Appleseed"
+}`);
+
   });
 })
