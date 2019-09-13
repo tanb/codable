@@ -133,39 +133,29 @@ describe('Accessor method properties test suite', () => {
 
   it('Accessor method properties are decodable', ()=> {
     const jsonString = `{
-  "first_name": "John",
-  "last_name": "Appleseed",
-  "full_name": "John Appleseed"
+  "username": "appleseed",
+  "created_at": "2019-01-23T04:56:07.000Z"
 }`;
     const responseBody: JSON = JSON.parse(jsonString);
 
     @CodingKeys({
-      first_name: 'first_name',
-      last_name: 'last_name',
-      full_name: 'full_name'
+      username: 'username',
+      created_at: 'created_at'
     })
     class User extends Codable {
-      _full_name!: string;
+      _created_at!: Date;
 
-      first_name!: string;
-      last_name!: string;
-
-      get full_name() {
-        return this._full_name;
+      get created_at(): string {
+        return this._created_at.toISOString()
       }
-      set full_name(val: string) {
-        this._full_name = val;
+      set created_at(val: string) {
+        this._created_at = new Date(val);
       }
     }
     const user = User.decode(responseBody);
-    expect(user.full_name).toBe('John Appleseed');
+    expect(user.created_at).toBe('2019-01-23T04:56:07.000Z');
+    expect(user._created_at.getTime()).toBe(1548219367000);
     const data = user.encode();
-    expect(JSON.stringify(data, null, 2))
-      .toBe(`{
-  "first_name": "John",
-  "last_name": "Appleseed",
-  "full_name": "John Appleseed"
-}`);
-
+    expect(JSON.stringify(data, null, 2)).toBe(jsonString);
   });
 })
