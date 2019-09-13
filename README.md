@@ -113,6 +113,11 @@ This example requestBody will be:
 ```
 
 ## Accessor method properties (getter/setter)
+
+Codable can encode/decode accessor method properties. 
+
+This is example. 
+
 ```javascript
 {
   "username": "appleseed",
@@ -120,8 +125,11 @@ This example requestBody will be:
 }
 ```
 
+If you want to have the ```created_at``` as Date type,
+then you can set the date value to inner value. 
+And you can filter specific inner property using ```@CodingKeys``` at an encoding time. 
 
-You can filter specific inner property using ```@CodingKeys```
+Accessor methods properties will be also converted. 
 
 ```typescript
 @CodingKeys({
@@ -138,7 +146,9 @@ class User extends Codable {
     this._created_at = new Date(val);
   }
 }
- ``
+```
+
+You can access inner value directly, and also accessor methods gonna work. 
 
 ```typescript
 
