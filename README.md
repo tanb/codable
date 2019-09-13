@@ -14,13 +14,17 @@ yarn add codable
 # Usage
 
 ## Import
-Import **Codable**, **CodableType** and **CodingKeys** to create codable class.
+
+Import ```Codable```, ```CodableType``` and ```CodingKeys``` to create codable class.
+
 ```typescript
 import { Codable, CodableType, CodingKeys } from 'codable';
 ```
 
 ## Decode
+
 Decode JSON response body to object.
+
 ```typescript
 // Example
 const responseBody: JSON = JSON.parse(`
@@ -49,10 +53,10 @@ class Coordinate extends Codable {
 }
 
 @CodingKeys({
-  name: "title",
-  foundingDate: "founding_date",
-  location: "location",
-  vantagePoints: "vantage_points"
+  name: 'title',
+  foundingDate: 'founding_date',
+  location: 'location',
+  vantagePoints: 'vantage_points'
 })
 class Landmark extends Codable {
   name: string;
@@ -68,7 +72,7 @@ class Landmark extends Codable {
 const landmark = Landmark.decode(responseBody);
 ```
 
-Landmark class has the class decorator **@CodingKeys** for property key mapping. If you set keys, only those keys properties are going to be converted. If you don't set **@CodingKeys** decorator, then every property will be converted.
+Landmark class has the class decorator ```@CodingKeys``` for property key mapping. If you set keys, only those keys properties are going to be converted. If you don't set ```@CodingKeys``` decorator, then every property will be converted.
 
 ```
 @CodingKeys({
@@ -105,5 +109,50 @@ This example requestBody will be:
       "longitude": 138.832873
     }
   ]
+}
+```
+
+## Accessor method properties (getter/setter)
+```javascript
+{
+  "username": "appleseed",
+  "created_at": "2019-01-23T04:56:07.000Z"
+}
+```
+
+
+You can filter specific inner property using ```@CodingKeys```
+
+```typescript
+@CodingKeys({
+  username: 'username',
+  created_at: 'created_at'
+})
+class User extends Codable {
+  _created_at!: Date;  // ignored by @CodingKeys
+
+  get created_at(): string {
+    return this._created_at.toISOString()
+  }
+  set created_at(val: string) {
+    this._created_at = new Date(val);
+  }
+}
+ ``
+
+```typescript
+
+const user = User.decode(responseBody);
+console.log(user._created_at.getTime());  // 1548219367000
+console.log(user.created_at);  // '2019-01-23T04:56:07.000Z'
+const data = user.encode();
+```
+
+The ```data```will be:
+
+```javascript
+{
+  "username": "appleseed",
+  "created_at": "2019-01-23T04:56:07.000Z"
 }
 ```
