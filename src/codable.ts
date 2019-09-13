@@ -34,6 +34,12 @@ export class Codable {
     return Object.assign(instance, keysValues) as InstanceType<T>;
   }
 
+  private getOwnProperties() {
+    const descripters = Object.getOwnPropertyDescriptors(this.constructor.prototype);
+    const dynamicProperties = Object.keys(descripters).filter((key) => !!descripters[key]['get']);
+    return ([] as string[]).concat(Object.keys(this), dynamicProperties);
+  }
+
   encode(): object {
     const data: { [key: string]: any } = {};
     let properties = [];
@@ -41,7 +47,7 @@ export class Codable {
     if (codingKeys) {
       properties = Object.keys(codingKeys);
     } else {
-      properties = ([] as string[]).concat(Object.keys(this), Object.keys(this.constructor.prototype));
+      properties = this.getOwnProperties()
     }
     const convert = (value: any): any => {
       if (value instanceof Codable) {
