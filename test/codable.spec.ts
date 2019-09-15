@@ -131,7 +131,35 @@ describe('Accessor method properties test suite', () => {
            );
   });
 
-  it('Accessor method properties are decodable', ()=> {
+    it('Accessor method properties work with codable.', ()=> {
+    const jsonString = `{
+  "username": "appleseed",
+  "created_at": "2019-01-23T04:56:07.000Z"
+}`;
+    const responseBody: JSON = JSON.parse(jsonString);
+
+    @CodingKeys({
+      username: 'username',
+      created_at_raw: 'created_at'
+    })
+    class User extends Codable {
+      created_at_raw!: string;
+
+      get createdAt(): Date {
+        return new Date(this.created_at_raw);
+      }
+      set createdAt(val: Date) {
+        this.created_at_raw = val.toISOString();
+      }
+    }
+    const user = User.decode(responseBody);
+    expect(user.created_at_raw).toBe('2019-01-23T04:56:07.000Z');
+    expect(user.createdAt.getTime()).toBe(1548219367000);
+    const data = user.encode();
+    expect(JSON.stringify(data, null, 2)).toBe(jsonString);
+  });
+
+  it('Accessor method properties are encodavle/decodable.', ()=> {
     const jsonString = `{
   "username": "appleseed",
   "created_at": "2019-01-23T04:56:07.000Z"
@@ -143,19 +171,28 @@ describe('Accessor method properties test suite', () => {
       created_at: 'created_at'
     })
     class User extends Codable {
-      _created_at!: Date;
+      _created_at: Date | null = null;
 
       get created_at(): string {
-        return this._created_at.toISOString()
+        if (this._created_at) {
+          return this._created_at.toISOString()
+        } else {
+          return "";
+        }
       }
       set created_at(val: string) {
         this._created_at = new Date(val);
+        if (this._created_at.toString() === 'Invalid Date') {
+          throw new Error('Invalid Date');
+        }
       }
     }
+    expect(() => User.decode({name:'test', created_at: 'dead'})).toThrowError('Invalid Date');
     const user = User.decode(responseBody);
     expect(user.created_at).toBe('2019-01-23T04:56:07.000Z');
-    expect(user._created_at.getTime()).toBe(1548219367000);
+    expect(user._created_at!.getTime()).toBe(1548219367000);
     const data = user.encode();
     expect(JSON.stringify(data, null, 2)).toBe(jsonString);
   });
+
 })

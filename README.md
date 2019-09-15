@@ -114,22 +114,38 @@ This example requestBody will be:
 
 ## Accessor method properties (getter/setter)
 
-Codable can encode/decode accessor method properties. 
+Accessor method properties also work with Codable class.
 
-This is example. 
-
-```javascript
-{
+```typescript
+const jsonString = `{
   "username": "appleseed",
   "created_at": "2019-01-23T04:56:07.000Z"
+}`;
+const responseBody: JSON = JSON.parse(jsonString);
+
+@CodingKeys({
+  username: 'username',
+  created_at_raw: 'created_at'
+})
+class User extends Codable {
+  created_at_raw!: string;
+
+  get createdAt(): Date {
+    return new Date(this.created_at_raw);
+  }
+  set createdAt(val: Date) {
+    this.created_at_raw = val.toISOString();
+  }
 }
+
+const user = User.decode(responseBody);
+console.log(user.created_at_raw);  // '2019-01-23T04:56:07.000Z'
+console.log(user.createdAt.getTime());  // 1548219367000
 ```
 
-If you want to have the ```created_at``` as Date type,
-then you can set the date value to inner value. 
-And you can filter specific inner property using ```@CodingKeys``` at an encoding time. 
+In this case, it has an original value in ```created_at_raw```. And the property ```createdAt``` handles the value as a ```Date```type.
 
-Accessor methods properties will be also converted. 
+In another case, if you want to set logic in accessor in decoding/encoding time, Codable can handle Accessor method properties at the time.
 
 ```typescript
 @CodingKeys({
@@ -144,14 +160,17 @@ class User extends Codable {
   }
   set created_at(val: string) {
     this._created_at = new Date(val);
+    if (this._created_at.toString() === 'Invalid Date') {
+      throw new Error('Invalid Date');
+    }
   }
 }
 ```
 
-You can access inner value directly, and also accessor methods gonna work. 
+You can access inner value directly, and also accessor methods gonna work.
 
 ```typescript
-
+// User.decode({name:'test', created_at: 'dead'});  // throws Error: Invalid Date
 const user = User.decode(responseBody);
 console.log(user._created_at.getTime());  // 1548219367000
 console.log(user.created_at);  // '2019-01-23T04:56:07.000Z'
