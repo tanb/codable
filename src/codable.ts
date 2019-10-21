@@ -9,6 +9,8 @@ export class Codable {
     const convert = <L extends typeof Codable>(value: any, klass: L): InstanceType<L> | InstanceType<L>[] => {
       if (Array.isArray(value)) {
         return value.map(v => klass.decode(v));
+      } else if (value === null || value === undefined) {
+        return value;
       } else {
         return klass.decode(value);
       }
