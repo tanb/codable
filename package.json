@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git@github.com:tanb/codable.git"
   },
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "files": [
     "dist"
   ],
