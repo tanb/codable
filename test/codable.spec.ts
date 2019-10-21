@@ -131,7 +131,7 @@ describe('Accessor method properties test suite', () => {
            );
   });
 
-    it('Accessor method properties work with codable.', ()=> {
+  it('Accessor method properties work with codable.', ()=> {
     const jsonString = `{
   "username": "appleseed",
   "created_at": "2019-01-23T04:56:07.000Z"
@@ -193,6 +193,30 @@ describe('Accessor method properties test suite', () => {
     expect(user._created_at!.getTime()).toBe(1548219367000);
     const data = user.encode();
     expect(JSON.stringify(data, null, 2)).toBe(jsonString);
+  });
+
+  it('Retrieve null or undefined', ()=> {
+    const jsonString = `{
+  "profile": {
+    "jobs": null
+  },
+  "username": "tmnrtnb"
+}`;
+    const responseBody: JSON = JSON.parse(jsonString);
+    class Job extends Codable {
+      name!: string;
+    }
+    class Profile extends Codable {
+      @CodableType(Job)
+      jobs!: Job[] | null
+    }
+    class User extends Codable {
+      username!: string;
+      @CodableType(Profile)
+      profile!: Profile;
+    }
+    const user = User.decode(responseBody);
+    expect(user.profile.jobs).toBe(null);
   });
 
 })
