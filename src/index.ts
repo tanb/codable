@@ -1,1 +1,1 @@
-export { Codable, CodableType } from './codable';
+export * from './codable';
