@@ -1,4 +1,4 @@
-import { Codable, CodableType, CodingKeys } from '../src/codable'
+import { Codable, CodableType, CodingKeys } from '../src'
 
 describe('Codable test suite', () => {
   const jsonString = `{
